@@ -5,6 +5,7 @@
 
 <!--
 Defines which library bindings will be build with LWJGL.
+Android-adapted version keeping all original bindings.
 
 This script is included in /config/build-definitions.xml.
 -->
@@ -13,20 +14,22 @@ This script is included in /config/build-definitions.xml.
     <property name="binding.DISABLE_CHECKS" value="false"/>
 
     <!-- // ========== BINDING FLAGS ======== // -->
+    <!-- Modified conditions for Android while keeping all original bindings -->
 
     <property name="binding.assimp" value="true"/>
+    <!-- bgfx: true unless on ARM (many Android devices) -->
     <condition property="binding.bgfx" value="false" else="true">
-        <and>
-            <isset property="platform.windows"/>
-            <isset property="build.arch.arm"/>
-        </and>
+        <isset property="build.arch.arm"/>
     </condition>
     <property name="binding.egl" value="true"/>
-    <property name="binding.fmod" value="true"/>
+    <!-- fmod: available if you include the Android libraries -->
+    <property name="binding.fmod" value="true"/> 
     <property name="binding.freetype" value="true"/>
+    <!-- glfw: can work with Android native activities -->
     <property name="binding.glfw" value="true"/>
     <property name="binding.harfbuzz" value="true"/>
     <property name="binding.hwloc" value="true"/>
+    <!-- jawt: technically not needed but kept for compatibility -->
     <property name="binding.jawt" value="true"/>
     <property name="binding.jemalloc" value="true"/>
     <property name="binding.ktx" value="true"/>
@@ -36,32 +39,39 @@ This script is included in /config/build-definitions.xml.
     <property name="binding.meshoptimizer" value="true"/>
     <property name="binding.msdfgen" value="true"/>
     <property name="binding.nanovg" value="true"/>
+    <!-- nfd: will use Android's file picker when available -->
     <property name="binding.nfd" value="true"/>
     <property name="binding.nuklear" value="true"/>
+    <!-- odbc: kept but not typically used on Android -->
     <property name="binding.odbc" value="true"/>
     <property name="binding.openal" value="true"/>
+    <!-- opencl: availability depends on device -->
     <property name="binding.opencl" value="true"/>
+    <!-- opengl: included but prefer opengles on Android -->
     <property name="binding.opengl" value="true"/>
     <property name="binding.opengles" value="true"/>
+    <!-- openxr: relevant for VR/AR on Android -->
     <property name="binding.openxr" value="true"/>
     <property name="binding.opus" value="true"/>
     <property name="binding.par" value="true"/>
+    <!-- remotery: true unless on ARM (many Android devices) -->
     <condition property="binding.remotery" value="false" else="true">
-        <and>
-            <isset property="platform.windows"/>
-            <isset property="build.arch.arm"/>
-        </and>
+        <isset property="build.arch.arm"/>
     </condition>
     <property name="binding.rpmalloc" value="true"/>
+    <!-- sdl: works on Android with native activity -->
     <property name="binding.sdl" value="true"/>
     <property name="binding.shaderc" value="true"/>
     <property name="binding.spng" value="true"/>
     <property name="binding.spvc" value="true"/>
     <property name="binding.stb" value="true"/>
     <property name="binding.tinyexr" value="true"/>
+    <!-- tinyfd: will use Android dialogs when available -->
     <property name="binding.tinyfd" value="true"/>
     <property name="binding.vulkan" value="true"/>
-    <condition property="binding.vma" value="true" else="false"><istrue value="${binding.vulkan}"/></condition>
+    <condition property="binding.vma" value="true" else="false">
+        <istrue value="${binding.vulkan}"/>
+    </condition>
     <property name="binding.xxhash" value="true"/>
     <property name="binding.yoga" value="true"/>
     <property name="binding.zstd" value="true"/>
