@@ -5,18 +5,20 @@
 <project name="native-linux" basedir="../.." xmlns:if="ant:if" xmlns:unless="ant:unless">
     <import file="../build-definitions.xml"/>
 
-    <condition property="linux.triplet" value="arm-linux-gnueabihf"><isset property="build.arch.arm32"/></condition>
-    <condition property="linux.triplet" value="aarch64-linux-gnu"><isset property="build.arch.arm64"/></condition>
-    <condition property="linux.triplet" value="powerpc64le-linux-gnu"><isset property="build.arch.ppc64le"/></condition>
-    <condition property="linux.triplet" value="riscv64-linux-gnu"><isset property="build.arch.riscv64"/></condition>
-    <condition property="linux.triplet" value="x86_64-linux-gnu"><isset property="build.arch.x64|x86"/></condition>
+  <condition property="linux.triplet" value="armv7a-linux-androideabi"><isset property="build.arch.arm32"/></condition>
+  <condition property="linux.triplet" value="aarch64-linux-android"><isset property="build.arch.arm64"/></condition>
+  <condition property="linux.triplet" value="riscv64-linux-android"><isset property="build.arch.riscv64"/></condition>
+  <condition property="linux.triplet" value="x86_64-linux-android"><isset property="build.arch.x64"/></condition>
+  <condition property="linux.triplet" value="i686-linux-android"><isset property="build.arch.x86"/></condition>
+  
+    <!-- Determine compiler prefix based on Android architecture -->
+  <condition property="gcc.prefix" value="aarch64-linux-android-"><equals arg1="${target.arch}" arg2="arm64-v8a"/></condition>
+  <condition property="gcc.prefix" value="arm-linux-androideabi-"><equals arg1="${target.arch}" arg2="armeabi-v7a"/></condition>
+  <condition property="gcc.prefix" value="i686-linux-android-"><equals arg1="${target.arch}" arg2="x86"/></condition>
+  <condition property="gcc.prefix" value="x86_64-linux-android-"><equals arg1="${target.arch}" arg2="x86_64"/></condition>
 
-    <condition property="gcc.prefix" value="" else="${linux.triplet}-">
-        <isset property="build.arch.x64|x86"/>
-    </condition>
-    <condition property="gcc.suffix" value="-${gcc.version}" else="">
-        <isset property="gcc.version"/>
-    </condition>
+<!-- Optional compiler version suffix -->
+  <condition property="gcc.suffix" value="-${gcc.version}" else=""><isset property="gcc.version"/></condition>
 
     <property name="module.lwjgl.rel" value="../../../../${module.lwjgl}"/>
 
